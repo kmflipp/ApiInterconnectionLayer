@@ -10,6 +10,7 @@ require_once('config.php');
 
 
 if ($controlunit_type=='1') {
+    require_once dirname(__FILE__) . 'Phpmodbus/ModbusMaster.php';
 
 }elseif ($controlunit_type=='2') {
 
