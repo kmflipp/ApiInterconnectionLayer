@@ -7,4 +7,4 @@ if (!defined('IN_CFG')) {
 include("mysql.php");
 
 $db = new sql_db($dbhost, $dbuname, $dbpass, $dbname, false);
-$rs=$db->sql_query1("SET NAMES utf8");
+$rs=$db->sql_query("SET NAMES utf8");

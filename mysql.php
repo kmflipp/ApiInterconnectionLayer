@@ -24,26 +24,10 @@ if(!defined("SQL_LAYER"))
             $this->server = $sqlserver;
             $this->dbname = $database;
 
-            if($this->persistency)
-            {
-                $this->db_connect_id = mysqli_connect($this->server, $this->user, $this->password);
-            }
-            else
-            {
-                $this->db_connect_id = mysqli_connect($this->server, $this->user, $this->password);
-            }
+            $this->db_connect_id = mysqli_connect($this->server, $this->user, $this->password,$this->dbname);
+
             if($this->db_connect_id)
             {
-                if($database != "")
-                {
-                    $this->dbname = $database;
-                    $dbselect = mysqli_select_db($this->dbname);
-                    if(!$dbselect)
-                    {
-                        mysqli_close($this->db_connect_id);
-                        $this->db_connect_id = $dbselect;
-                    }
-                }
                 return $this->db_connect_id;
             }
             else
@@ -75,49 +59,15 @@ if(!defined("SQL_LAYER"))
         //
         // Base query method
         //
-        function sql_query($query = "", $transaction = FALSE)
-        {
+        function sql_query($query = "", $transaction = FALSE){
             // Remove any pre-existing queries
             unset($this->query_result);
-            if($query != "")
-            {
-
-                $this->query_result = mysqli_query($query, $this->db_connect_id);
-
+            if ($query!="") {
+                $this->query_result = mysqli_query($this->db_connect_id, $query);
             }
-            if($this->query_result)
-            {
-                unset($this->row[$this->query_result]);
-                unset($this->rowset[$this->query_result]);
-                return $this->query_result;
-            }
-            else
-            {
-                return ( $transaction == END_TRANSACTION ) ? true : false;
-            }
+            return $this->query_result;
         }
 
-        function sql_query1($query = "", $transaction = FALSE)
-        {
-            // Remove any pre-existing queries
-            unset($this->query_result);
-            if($query != "")
-            {
-
-                $this->query_result = mysqli_query($query, $this->db_connect_id);
-
-            }
-            if($this->query_result)
-            {
-                unset($this->row[$this->query_result]);
-                unset($this->rowset[$this->query_result]);
-                return $this->query_result;
-            }
-            else
-            {
-                return ( $transaction == END_TRANSACTION ) ? true : false;
-            }
-        }
 
         //
         // Other query methods

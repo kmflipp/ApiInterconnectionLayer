@@ -18,6 +18,7 @@ $key = strtoupper(substr(md5('W7E7INJX2V-'.md5(date('Ymd'))),0,20));
 
 
 
-$controlunit_type="1";
-$controlunit_ip="";
-$controlunit_name="";
+$controlunit_type="1"; //1 modbus     2 web services      3 TecnoOut
+$modbus_host="192.192.15.51";
+
+
