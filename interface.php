@@ -7,6 +7,8 @@ require_once("Phpmailer/PHPMailerAutoload.php");
 require_once("functions.php");
 require_once("config_dynamics.php");
 
+require_once('Phpmodbus/ModbusMaster.php');
+
 
 if ($max_wps_failed_login_attempt > intval($failed_wsp_login)) {
     $response=wsp_login();
@@ -23,36 +25,61 @@ if ($max_wps_failed_login_attempt > intval($failed_wsp_login)) {
     }else{
         isc_log('wsp_login',$response[response],'');
         echo "Program logged on succesfully on WSP API.<br>";
-        print_r($response);
-        //$toekn=$response[token];
 
-        if ($controlunit_type=='1') {
-            require_once('Phpmodbus/ModbusMaster.php');
+        $toekn=$response[token];
 
-            // Create Modbus object
-            $modbus = new ModbusMasterUdp($modbus_host);
 
-            try {
-                // Read input discretes - FC 4
-                $recData = $modbus->readMultipleInputRegisters(0, 0, 2);
-                isc_log('Main: modbus interrogation',$modbus_host,$recData);
-                echo "Main: modbus interogation. Data stream downloaded.";
-            }
-            catch (Exception $e) {
-                isc_log('Main: modbus interrogation',$modbus,$e);
-                echo "Main: modbus interogation. Program terminated with errors. Please check the log table.";
-                exit;
-            }
+        switch ($controlunit_type) {
 
-            $json_recData= json_encode($recData);
-            wsp_recData($token,$json_recData);
+            case "modbus":
+                //ask to the control unit device name/spec and ipaddress
+                wsp_logdeviceinformation($customer_name, $device, $ip_address);
 
-        }elseif ($controlunit_type=='2') {
+                // Create Modbus object
+                $modbus = new ModbusMasterUdp($modbus_host);
+                try {
+                    // Read input discretes - FC 4
+                    $recData = $modbus->readMultipleInputRegisters(0, 0, 2);
+                    isc_log('Main: modbus interrogation', $modbus_host, $recData);
+                    echo "Main: modbus interogation. Data stream downloaded.";
+                } catch (Exception $e) {
+                    isc_log('Main: modbus interrogation', $modbus, $e);
+                    echo "Main: modbus interogation. Program terminated with errors. Please check the log table.";
+                    exit;
+                }
+                $json_recData = json_encode($recData);
+                wsp_recData($token, $json_recData);
 
-        }elseif ($controlunit_type=='3') {
+                break;
 
-        }else{
+            case "wildix":
+                $res=isc_wildix_candidates();
+                var_dump($res);
+                ?>
+                <!--
+                <script src="Wildix-jsframework/wtapi.min.js"></script>
+                <script language="JavaScript">
+                    var extension = "323";
+                    var password = "wil-046";
+                    var url = "https://your_domain.wildixin.com[:443]";
+                    var api = new WTAPI(extension, password, url);
+                    api.connect();
 
+                    var device = new Device();
+                    device.getName();
+                </script>
+                -->
+                <?php
+                //ask to the control unit device name/spec and ipaddress
+                //wsp_logdeviceinformation($customer_name, $device, $ip_address);
+
+                //wsp_recData($token, $json_recData);
+
+                break;
+
+            default:
+
+                break;
         }
     }
 }else{

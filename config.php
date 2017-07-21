@@ -5,7 +5,7 @@ if (!defined('IN_CFG')) {
 }
 
 //main configuration
-$controlunit_type="1"; //1 modbus     2 web services      3 TecnoOut
+$controlunit_type="wildix";
 $customer_name="Peppino salumi SA";
 $failed_wsp_login=9999;
 $max_wps_failed_login_attempt=5;
@@ -29,10 +29,16 @@ $password='EDE8s2ntbaTw9fmY';
 //database configuration
 $dbhost="localhost";
 $dbuname="root";
-$dbpass="Rodney8472";
+$dbpass="raspberry";
 $dbname="isc";
 
 //modbus configuration
 //configurable by th custmer
 $modbus_host="192.192.15.51";
+
+//wildix configuration
+//configurable by th custmer
+$wildix_apiEndPoint="https://10.120.7.30/api/v1/PBX";
+$wildix_passwd="boh?";
+$wildix_user="wmsdevice";
 

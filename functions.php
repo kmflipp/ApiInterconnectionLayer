@@ -83,11 +83,11 @@ function wsp_login(){
     return $response;
 }
 
-function wsp_logdeviceinformation($timestamp,$customer_name,$device,$ip_address){
+function wsp_logdeviceinformation($customer_name,$device,$ip_address){
     global $apiEndPoint, $key, $email;
     $cmd = 'logDeviceInformation';
 
-    $params = http_build_query(array("cmd" => $cmd, "key" => $key, "user_login" => $email, "timestamp" => $timestamp, "customer_name" => $customer_name, "device" => $device, "ip_address" => $ip_address));
+    $params = http_build_query(array("cmd" => $cmd, "key" => $key, "user_login" => $email, "customer_name" => $customer_name, "device" => $device, "ip_address" => $ip_address));
     $curl = curl_init($apiEndPoint);
     curl_setopt($curl, CURLOPT_POST, true);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/x-www-form-urlencoded'));
@@ -132,6 +132,26 @@ function wsp_recData($token,$json_recData){
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/x-www-form-urlencoded'));
     curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+    $response = json_decode(curl_exec($curl),true);
+    $err = curl_error($curl);
+    $errorCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    curl_close($curl);
+
+    return $response;
+}
+
+function isc_wildix_candidates(){
+    global $wildix_apiEndPoint,$wildix_user,$wildix_passwd;
+
+    $curl = curl_init($wildix_apiEndPoint."/candidates");
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/x-www-form-urlencoded'));
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_USERPWD, $wildix_user . ":" . $wildix_passwd);
+    curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+
 
     $response = json_decode(curl_exec($curl),true);
     $err = curl_error($curl);
