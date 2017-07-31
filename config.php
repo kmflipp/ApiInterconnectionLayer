@@ -5,8 +5,6 @@ if (!defined('IN_CFG')) {
 }
 
 //main configuration
-$controlunit_type="wildix";
-$customer_name="Peppino salumi SA";
 $failed_wsp_login=9999;
 $max_wps_failed_login_attempt=5;
 
@@ -15,10 +13,6 @@ $smtp="asmtp.mail.hostpoint.ch";
 $smtp_port="587";
 $smtp_username="testapi@graytechnology.ch";
 $smtp_password="_ISC_GRAY_000000";
-
-//configurable by the customer
-$to = "dp@danielepierini.ch";
-
 
 //WPS API configuration data
 $apiEndPoint='https://www.wsplatform.com/v1/?page=api';
@@ -32,13 +26,8 @@ $dbuname="root";
 $dbpass="raspberry";
 $dbname="isc";
 
-//modbus configuration
-//configurable by th custmer
-$modbus_host="192.192.15.51";
-
-//wildix configuration
-//configurable by th custmer
-$wildix_apiEndPoint="https://10.120.7.30/api/v1/PBX";
-$wildix_passwd="boh?";
-$wildix_user="wmsdevice";
-
+//include customer configuration files
+foreach (glob("config/*.php") as $filename)
+{
+    include $filename;
+}

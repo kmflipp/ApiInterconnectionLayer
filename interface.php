@@ -54,22 +54,9 @@ if ($max_wps_failed_login_attempt > intval($failed_wsp_login)) {
 
             case "wildix":
                 $res=isc_wildix_candidates();
+                echo "<pre>";
                 var_dump($res);
-                ?>
-                <!--
-                <script src="Wildix-jsframework/wtapi.min.js"></script>
-                <script language="JavaScript">
-                    var extension = "323";
-                    var password = "wil-046";
-                    var url = "https://your_domain.wildixin.com[:443]";
-                    var api = new WTAPI(extension, password, url);
-                    api.connect();
-
-                    var device = new Device();
-                    device.getName();
-                </script>
-                -->
-                <?php
+                echo "</pre>";
                 //ask to the control unit device name/spec and ipaddress
                 //wsp_logdeviceinformation($customer_name, $device, $ip_address);
 

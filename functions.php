@@ -144,14 +144,16 @@ function wsp_recData($token,$json_recData){
 function isc_wildix_candidates(){
     global $wildix_apiEndPoint,$wildix_user,$wildix_passwd;
 
-    $curl = curl_init($wildix_apiEndPoint."/candidates");
-    curl_setopt($curl, CURLOPT_POST, true);
+    $params = "?search=320";
+
+    $curl = curl_init($wildix_apiEndPoint."/CallHistory/".$params);
     curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type:application/x-www-form-urlencoded'));
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($curl, CURLOPT_USERPWD, $wildix_user . ":" . $wildix_passwd);
     curl_setopt($curl, CURLOPT_TIMEOUT, 30);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-
+    curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
 
     $response = json_decode(curl_exec($curl),true);
     $err = curl_error($curl);
